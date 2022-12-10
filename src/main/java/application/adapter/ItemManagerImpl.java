@@ -1,37 +1,52 @@
 package application.adapter;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
+import application.port.ItemsManager;
+import bean.Item;
+import mapper.item.ItemMapper;
+import model.ItemEntity;
+import repository.port.mongo.ItemRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import org.jboss.logging.Logger;
+
 
 @ApplicationScoped
-@Path("/api")
-public class ItemService {
+public class ItemManagerImpl implements ItemsManager {
+
+    private static final Logger logger = Logger.getLogger(ItemManagerImpl.class);
+    @Inject
+    ItemRepository itemRepository;
 
     @Inject
-    MongoClient mongoClient;
+    ItemMapper itemMapper;
 
-    @Path("/ping")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String ping() {
-        return "pong";
+    public List<Item> getItemList() {
+        List<Item> itemList = new ArrayList<>();
+
+        try {
+            List<ItemEntity> itemEntities = itemRepository.getItemList();
+            for(ItemEntity ie : itemEntities){
+                Item item = itemMapper.mapEntityToBean(ie);
+                itemList.add(item);
+            }
+        } catch (Exception e){
+            logger.error("catching exception", e);
+        }
+        return  itemList;
     }
 
-    @Path("/list")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public MongoCollection getItems() {
-        return this.getCollection();
+    @Override
+    public String insertItem(Item itemBean){
+        try {
+            ItemEntity itemEntity = itemMapper.mapBeanToEntity(itemBean);
+            return itemRepository.insertItem(itemEntity);
+        } catch (Exception e) {
+            logger.error("catching exception", e);
+        }
+        return "";
     }
 
-    private MongoCollection getCollection() {
-        return mongoClient.getDatabase("bi_test_db").getCollection("items");
-    }
 }

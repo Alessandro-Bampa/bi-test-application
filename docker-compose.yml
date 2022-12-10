@@ -1,0 +1,20 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: quarkus/bi-test-application-jvm
+    container_name: bi_test_app_container
+    ports:
+     - "8080:8080"
+     - "5005:5005"
+
+
+  mongoDB:
+    image: mongo:4.0
+    container_name: bi_test_db_container
+    ports:
+      - 27017-27017:27017-27017
+    volumes:
+      - ./data:/data/db
