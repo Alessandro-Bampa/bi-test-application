@@ -8,6 +8,23 @@
 To build this application, I used the Java framework `Quarkus` and `MongoDB` as the database. \
 I used docker-compose for build the images and run the containers of App and Database. 
 
+#### I divided the project into 3 layers:
+
+- **Presentation**: the layer that interfaces with clients and exposes entrypoints.
+
+- **Application**: the layer that implements the services.
+
+- **Repository**: the layer that interfaces with databases or other applications that might provide the entities.
+
+
+#### Each layer is divided into 2 sublayers:
+
+- **Port**: Declares the signature of the methods (interface).
+
+- **Adapter**: Implements the methods of the interface, which could have different implementations depending on the requirements.
+
+
+
 For your convenience, when I start the containers I populate the database with sample data `./data/mongo-init.js` , \
 so every time you start the containers the database will be cleaned and initialized with that data.
 
