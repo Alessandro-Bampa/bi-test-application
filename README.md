@@ -26,7 +26,7 @@ The API endpoints, calls and response schemas are defined there.
 
 - When I populate the database with the sample data `./data/mongo-init.js`, I also insert a TTL index in the `updated` field, \
 which allows me not only to improve query performance, but also to decide how soon the document should expire based on the update date.
-- I put in 600 seconds of TTL
+- I put 600 seconds of TTL
 
 
 ### Running the application in docker containers
