@@ -11,7 +11,6 @@ import repository.port.mongo.ItemRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,19 +28,15 @@ public class ItemManagerImpl implements ItemsManager {
     @Inject
     ItemMapper itemMapper;
 
-    public List<Item> getItemList() {
-        List<Item> itemList = new ArrayList<>();
-
+    @Override
+    public Item getItem(String itemId){
         try {
-            List<ItemEntity> itemEntities = itemRepository.getItemList();
-            for(ItemEntity ie : itemEntities) {
-                Item item = itemMapper.mapEntityToBean(ie);
-                itemList.add(item);
-            }
-        } catch (Exception e){
+            ItemEntity itemEntity = itemRepository.getItem(itemId);
+            return itemMapper.mapEntityToBean(itemEntity);
+        } catch (Exception e) {
             logger.error("catching exception", e);
         }
-        return  itemList;
+        return null;
     }
 
     @Override
@@ -55,16 +50,6 @@ public class ItemManagerImpl implements ItemsManager {
         return "";
     }
 
-    @Override
-    public Item getItem(String itemId){
-        try {
-            ItemEntity itemEntity = itemRepository.getItem(itemId);
-            return itemMapper.mapEntityToBean(itemEntity);
-        } catch (Exception e) {
-            logger.error("catching exception", e);
-        }
-        return null;
-    }
 
     @Override
     public UpdateItemValueResponse updateItemValue(UpdateItemValueRequest request) {

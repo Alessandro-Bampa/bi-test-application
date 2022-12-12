@@ -2,7 +2,6 @@ package repository.adapter.mongo;
 
 import bean.request.ItemSearchRequest;
 import bean.request.UpdateItemValueRequest;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import model.ItemEntity;
 import org.bson.conversions.Bson;
@@ -11,7 +10,6 @@ import repository.port.CollectionNames;
 import repository.port.mongo.ItemRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,16 +40,6 @@ public class ItemRepositoryImpl extends AbstractRepositoryMongo<ItemEntity> impl
     }
 
     @Override
-    public List<ItemEntity> getItemList() {
-        List<ItemEntity> itemList = new ArrayList<>();
-        FindIterable<ItemEntity> itemCollection = getCollection().find();
-            for(ItemEntity item : itemCollection) {
-                itemList.add(item);
-            }
-          return itemList;
-    }
-
-    @Override
     public String insertItem(ItemEntity item) {
         item.setCreated(new Date());
         item.setUpdated(new Date());
@@ -73,12 +61,15 @@ public class ItemRepositoryImpl extends AbstractRepositoryMongo<ItemEntity> impl
         return updateOne(filter,update);
     }
 
-    //TODO: fix search implementation
+
     @Override
     public List<ItemEntity> searchItems(ItemSearchRequest search) {
         Bson filter;
-        Bson valueFilter = null;
-        Bson tagsFilter = null;
+
+        //not mandatory filters always true
+        Bson valueFilter = eq(FAKE_FIELD, null);
+        Bson tagsFilter = eq(FAKE_FIELD, null);
+
         if(search.getValue() != null && search.getValueComparisonFilters() != null){
             switch (search.getValueComparisonFilters()){
                 case EQ:
@@ -89,6 +80,13 @@ public class ItemRepositoryImpl extends AbstractRepositoryMongo<ItemEntity> impl
                     break;
                 case LT:
                     valueFilter = lt(VALUE_FIELD,search.getValue());
+                    break;
+                case LTE:
+                    valueFilter = lte(VALUE_FIELD,search.getValue());
+                    break;
+                case GTE:
+                    valueFilter = gte(VALUE_FIELD,search.getValue());
+                    break;
             }
         }
 

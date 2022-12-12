@@ -18,11 +18,6 @@ public class ItemRestServiceImpl implements ItemRestService {
     ItemsManager itemsManager;
 
     @Override
-    public List<Item> getItemList() {
-        return itemsManager.getItemList();
-    }
-
-    @Override
     public String insertItem(Item itemBean){
         return itemsManager.insertItem(itemBean);
     }

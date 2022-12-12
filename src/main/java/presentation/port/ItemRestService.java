@@ -12,11 +12,6 @@ import java.util.List;
 @Path("item")
 public interface ItemRestService {
 
-    @Path("list")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    List<Item> getItemList();
-
     @Path("insert")
     @POST
     @Produces(MediaType.TEXT_PLAIN)

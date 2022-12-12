@@ -1,71 +1,61 @@
-# code-with-quarkus Project
+# Java Test Application
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+#### That is a simple web application which contains following features:
+- Persistent data which can be modified and read.
+- HTTP REST API for accessing the data by clients.
+- Expiration of old data
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+To build this application, I used the Java framework `Quarkus` and `MongoDB` as the database. \
+I used docker-compose for build the images and run the containers of App and Database. 
 
-## Running the application in dev mode
+For your convenience, when I start the containers I populate the database with sample data `./data/mongo-init.js` , \
+so every time you start the containers the database will be cleaned and initialized with that data.
 
-You can run your application in dev mode that enables live coding using:
+
+#### API :
+
+- In the `swagger_ui` folder you can find the `index.htm` that contains the auto-generated documentation using OpenApi standard. \
+The API endpoints, calls and response schemas are defined there.
+
+#### CACHE :
+
+- Data caching is provided by MongoDB that keeps most recently used data in RAM;
+- Otherwise, I could have used an in-memory database like Redis to implement a caching system;
+
+#### ITEM EXPIRATION :
+
+- When I populate the database with the sample data `./data/mongo-init.js`, I also insert a TTL index in the `updated` field, \
+which allows me not only to improve query performance, but also to decide how soon the document should expire based on the update date.
+- I put in 600 seconds of TTL
+
+
+### Running the application in docker containers
+
+### Prerequisite: `docker` & `docker-compose`
+
 ```shell script
-./mvnw compile quarkus:dev
+ docker-compose build
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
 ```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+ docker-compose up -d
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+stop containers
 
-## Creating a native executable
-
-You can create a native executable using: 
 ```shell script
-./mvnw package -Pnative
+ docker-compose down
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+If you want apply the modifications you must reconpile the app and build docker compose
+
 ```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
+ ./mvnw package
 ```
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+If you want run the App in dev mode without docker:
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- MongoDB client ([guide](https://quarkus.io/guides/mongodb)): Connect to MongoDB in either imperative or reactive style
-- REST Client Reactive ([guide](https://quarkus.io/guides/rest-client-reactive)): Call REST services reactively
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A JAX-RS implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- YAML Configuration ([guide](https://quarkus.io/guides/config#yaml)): Use YAML to configure your Quarkus application
-
-## Provided Code
-
-### YAML Config
-
-Configure your application with YAML
-
-[Related guide section...](https://quarkus.io/guides/config-reference#configuration-examples)
-
-The Quarkus application configuration is located in `src/main/resources/application.yml`.
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- You must remember to replace in the application.properties the db connection string with `mongodb://localhost:27017/bi_test_db`
+```shell script
+ ./mvnw clean package quarkus:dev
+```

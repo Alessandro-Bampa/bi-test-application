@@ -11,8 +11,6 @@ public interface ItemRepository {
 
     String collectionName();
 
-    List<ItemEntity> getItemList();
-
     String insertItem(ItemEntity item);
 
     ItemEntity getItem(String itemId);
