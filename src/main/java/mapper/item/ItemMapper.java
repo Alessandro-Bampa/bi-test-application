@@ -2,6 +2,7 @@ package mapper.item;
 
 import bean.Item;
 import model.ItemEntity;
+import org.bson.types.ObjectId;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -19,7 +20,7 @@ public class ItemMapper {
 
     public Item mapEntityToBean(ItemEntity entity){
         Item bean = new Item();
-        bean.setItemId(entity.getId().toString());
+        bean.setId(entity.getId().toString());
         bean.setValue(entity.getValue());
         bean.setCreated(entity.getCreated());
         bean.setUpdated(entity.getUpdated());

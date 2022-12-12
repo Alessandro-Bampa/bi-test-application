@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Item {
 
-    private String itemId;
+    private String id;
+
     private int value;
 
     private List<String> tags;
@@ -14,12 +15,12 @@ public class Item {
 
     private Date updated;
 
-    public String getItemId() {
-        return itemId;
+    public String getId() {
+        return id;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setId(String itemId) {
+        this.id = itemId;
     }
 
     public int getValue() {

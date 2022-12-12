@@ -2,7 +2,9 @@ package presentation.adapter;
 
 import application.port.ItemsManager;
 import bean.Item;
-import bean.response.ItemResponse;
+import bean.request.ItemSearchRequest;
+import bean.request.UpdateItemValueRequest;
+import bean.response.UpdateItemValueResponse;
 import presentation.port.ItemRestService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,6 +25,21 @@ public class ItemRestServiceImpl implements ItemRestService {
     @Override
     public String insertItem(Item itemBean){
         return itemsManager.insertItem(itemBean);
+    }
+
+    @Override
+    public Item getItem(String itemId) {
+        return itemsManager.getItem(itemId);
+    }
+
+    @Override
+    public UpdateItemValueResponse updateItemValue(UpdateItemValueRequest request) {
+        return itemsManager.updateItemValue(request);
+    }
+
+    @Override
+    public List<Item> searchItems(ItemSearchRequest search) {
+        return itemsManager.searchItems(search);
     }
 
 }

@@ -17,5 +17,5 @@ stop containers
 If you want apply the modifications you must reconpile the app and build docker compose
 
 ```shell script
- ./mvnw package -DskipTests
+ ./mvnw package
 ```
