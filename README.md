@@ -31,7 +31,7 @@ so every time you start the containers the database will be cleaned and initiali
 
 #### API :
 
-- In the `swagger_ui` folder you can find the `index.htm` that contains the auto-generated documentation using OpenApi standard. \
+- In the `swagger_ui` folder you can find the `index.html` that contains the auto-generated documentation using OpenApi standard. \
 The API endpoints, calls and response schemas are defined there.
 
 #### CACHE :
